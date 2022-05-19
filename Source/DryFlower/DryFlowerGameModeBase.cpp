@@ -24,7 +24,7 @@ void ADryFlowerGameModeBase::Start() //블루프린트 BeginPlay()에서 호출
 
 void ADryFlowerGameModeBase::MakePlayerSpawnRoom()
 {
-    RoomType rooms[9][9];
+//    RoomType rooms[9][9];
     int startX = 0;
     int startY = 0;
     while(true)

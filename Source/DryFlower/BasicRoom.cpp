@@ -16,7 +16,7 @@ void ABasicRoom::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetActorLocation(FVector(roomNumber % 9 * 1500, roomNumber / 9 * 900, 0), false, 0, ETeleportType::None);
+	//SetActorLocation(FVector(roomNumber % 9 * 1500, roomNumber / 9 * 900, 0), false, 0, ETeleportType::None);
 }
 
 // Called every frame
