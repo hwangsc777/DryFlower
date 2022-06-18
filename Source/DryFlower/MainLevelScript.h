@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/LevelScriptActor.h"
 #include "EnumHeader.h"
+#include "MyCharacter.h"
 #include "Net/UnrealNetwork.h"
 #include "MainLevelScript.generated.h"
 
@@ -57,6 +58,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = RoomActorsRef, Replicated)
 	TArray<FRoomInfo> roomInfo;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = RoomActorsRef, Replicated)
+	TArray<AActor*> pawnList;
+
 	UFUNCTION(BlueprintCallable)
 	void InitialRoomSetup();
 
@@ -80,13 +84,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Algorithm, Replicated)
 	int maxBorder;
 
-	int GetRoomNumberFromIndex(FIntPoint index);
-	void RoomCreateAlgorithm(FRoomInfo *currentRoom, FRoomInfo *priviousRoom);
-	void AddAnotherPlayerRoom();
-	bool CheckTopRoomIs(int roomNum, RoomType type);
-	bool CheckBottomRoomIs(int roomNum, RoomType type);
-	bool CheckLeftRoomIs(int roomNum, RoomType type);
-	bool CheckRightRoomIs(int roomNum, RoomType type);
-	bool CheckIsInBound(int roomX, int roomY);
-	bool CanMakePlayerSpawnRoom(int targetRoomNum, int distance);
+	void RoomCreateAlgorithm(int currentRoomNum);
+	void AddAnotherPlayerRoom(int distance);
+	bool CheckIsInBound(int roomIndex, Arrow arrow, int minX, int maxX, int minY, int maxY, int width);
+	bool CanMakePlayerSpawnRoom(int currentRoomNum, Arrow arrow, int distance);
+	int GetRoomNum(int currentRoomNum, Arrow arrow);
+	RoomType GetRoomType(int currentRoomNum, Arrow arrow);
+	void SetRoomType(int currentRoomNum, Arrow arrow, RoomType roomType);
+	void SetRoomDoor(int currentRoomNum, Arrow arrow, bool active);
+	void SetRoomWall(int currentRoomNum, Arrow arrow, bool active);
+	bool CheckWallExist(int currentRoomNum, Arrow arrow);
+	void ConnectingTest();
+	int GetDestinationDistance(int currentRoomNum, int destinationRoomNum, int beforeRoomNum);
+	void MakeRestrictedRoom();
 };
