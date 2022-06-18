@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MyCharacter.h"
+#include "MyMurdererCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/InputComponent.h"
@@ -12,7 +12,7 @@
 #include "Animation/AnimMontage.h"
 
 // Sets default values
-AMyCharacter::AMyCharacter()
+AMyMurdererCharacter::AMyMurdererCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -44,91 +44,54 @@ AMyCharacter::AMyCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	/*
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> Cha2_MakeObject
-	(TEXT("AnimMontage'/Game/Character/Animation/Mixamo_Adam/Anim2/Cha2_Make.Cha2_Make'"));
-	if (Cha2_MakeObject.Succeeded())
-	{
-		MakeAnim = Cha2_MakeObject.Object;
-	}*/
 }
 
 // Called when the game starts or when spawned
-void AMyCharacter::BeginPlay()
+void AMyMurdererCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
-void AMyCharacter::Tick(float DeltaTime)
+void AMyMurdererCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AMyMurdererCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveRight", this, &AMyCharacter::MoveRight);
-	PlayerInputComponent->BindAxis("MoveForward", this, &AMyCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMyMurdererCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &AMyMurdererCharacter::MoveForward);
 
-	PlayerInputComponent->BindAction("Make", IE_Pressed, this, &AMyCharacter::Make);
-	//PlayerInputComponent->BindAction("Die", IE_Pressed, this, &AMyCharacter::Die);
-	//PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AMyCharacter::Attack);
+	//PlayerInputComponent->BindAction("Make", IE_Pressed, this, &AMyMurdererCharacter::Make);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AMyMurdererCharacter::Attack);
 }
 
-void AMyCharacter::MoveRight(float Value)
+void AMyMurdererCharacter::MoveRight(float Value)
 {
-	if (DieCheck == false)
-	{
-		const FRotator YawRotation(0, Controller->GetControlRotation().Yaw, 0);
-		const FVector Direction = UKismetMathLibrary::GetRightVector(YawRotation);
-		AddMovementInput(Direction, Value);
-		if (Value != 0.f)
-		{
-			CameraBoom->TargetArmLength = 900.0f;
-			CameraBoom->SetRelativeRotation(FRotator(-89.f, -90.f, 0.f));
-			StopAnimMontage(MakeAnim);
-		}
-	}
+	const FRotator YawRotation(0, Controller->GetControlRotation().Yaw, 0);
+	const FVector Direction = UKismetMathLibrary::GetRightVector(YawRotation);
+	AddMovementInput(Direction, Value);
 }
 
 
-void AMyCharacter::MoveForward(float Value)
+void AMyMurdererCharacter::MoveForward(float Value)
 {
-	if (DieCheck == false)
-	{
-		const FRotator YawRotation(0, Controller->GetControlRotation().Yaw, 0);
-		const FVector Direction = UKismetMathLibrary::GetForwardVector(YawRotation);
-		AddMovementInput(Direction, Value);
-		if (Value != 0.f)
-		{
-			CameraBoom->TargetArmLength = 900.0f;
-			CameraBoom->SetRelativeRotation(FRotator(-89.f, -90.f, 0.f));
-			StopAnimMontage(MakeAnim);
-		}
-	}
+	const FRotator YawRotation(0, Controller->GetControlRotation().Yaw, 0);
+	const FVector Direction = UKismetMathLibrary::GetForwardVector(YawRotation);
+	AddMovementInput(Direction, Value);
 }
 
-void AMyCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
-{
-	//UE_LOG(LogTemp, Log, TEXT("can"));
-	NowCanSearch = true;
-}
-
-void AMyCharacter::NotifyActorEndOverlap(AActor* OtherActor)
-{
-	//UE_LOG(LogTemp, Log, TEXT("cannot"));
-	NowCanSearch = false;
-}
-
-void AMyCharacter::Make() //³ªÁß¿¡ Search·Î º¯°æ
+/*
+void AMyMurdererCharacter::Make() //³ªÁß¿¡ Search·Î º¯°æ
 {
 	//µî·ÏµÈ ¸ùÅ¸ÁÖ Àç»ý
-	if (NowCanSearch == true)
+	if (1)
 	{
 		//µé¾î¿Ô³ª È®ÀÎÇÏ´Â ·Î±× ¸Þ½ÃÁö
 		//UE_LOG(LogTemp, Log, TEXT("Log Message"));
@@ -138,7 +101,6 @@ void AMyCharacter::Make() //³ªÁß¿¡ Search·Î º¯°æ
 		CameraBoom->SetRelativeRotation(FRotator(-60.f, -90.f, 0.f));
 	}
 
-	/*
 	//¸¸µå´Â Áß¿¡ ¸ø ¿òÁ÷ÀÌ°Ô ÇÏ±â
 	//MakeCheck = true;
 
@@ -149,11 +111,10 @@ void AMyCharacter::Make() //³ªÁß¿¡ Search·Î º¯°æ
 			MakeCheck = false;
 
 		}), MakeTime, false);
-	*/
 }
+*/
 
-/*
-void AMyCharacter::Attack() //»ìÀÎ¸¶ °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Ãâ·Â, Áö±ÝÀº »ýÁ¸ÀÚµµ ÀÛµ¿ÇÔ ³ªÁß¿¡ ³ª´²¾ß µÊ
+void AMyMurdererCharacter::Attack() //»ìÀÎ¸¶ °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Ãâ·Â
 {
 	//µî·ÏµÈ ¸ùÅ¸ÁÖ Àç»ý
 	if (IsAttacking == false)
@@ -162,15 +123,4 @@ void AMyCharacter::Attack() //»ìÀÎ¸¶ °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Ãâ·Â, Áö±ÝÀº »ýÁ¸ÀÚµµ ÀÛµ¿Ç
 		//UE_LOG(LogTemp, Log, TEXT("Log Message"));
 		PlayAnimMontage(MakeAnim, 1.f, FName("start_1"));
 	}
-
-}
-*/ // »ìÀÎ¸¶¿ë ÇÔ¼ö
-
-void AMyCharacter::Die() //Ä³¸¯ÅÍ Á×À» ¶§ ³ª¿Ã ¾Ö´Ï¸ÞÀÌ¼Ç
-{
-	//UE_LOG(LogTemp, Log, TEXT("Log Message"));
-	DieCheck = true;
-	//Ä³¸¯ÅÍ ÇÇÁ÷½º ½Ã¹Ä·¹ÀÌÆ®
-	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
-	GetMesh()->SetSimulatePhysics(true);
 }
